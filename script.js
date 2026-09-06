@@ -1,17 +1,27 @@
 const slides = Array.from(document.querySelectorAll("[data-slide]"));
 const statusText = document.getElementById("statusText");
 const body = document.body;
+const motionButton = document.querySelector('[data-action="motion"]');
 let currentIndex = 0;
 let touchStartX = 0;
 
 function renderSlide(index) {
+  if (slides.length === 0) {
+    return;
+  }
+
   currentIndex = (index + slides.length) % slides.length;
 
   slides.forEach((slide, slideIndex) => {
-    slide.classList.toggle("is-active", slideIndex === currentIndex);
+    const isActive = slideIndex === currentIndex;
+    slide.classList.toggle("is-active", isActive);
+    slide.hidden = !isActive;
+    slide.setAttribute("aria-hidden", String(!isActive));
   });
 
-  statusText.textContent = `${currentIndex + 1} / ${slides.length}`;
+  if (statusText) {
+    statusText.textContent = `${currentIndex + 1} / ${slides.length}`;
+  }
 }
 
 function toggleTheme() {
@@ -21,7 +31,10 @@ function toggleTheme() {
 function toggleMotion() {
   const motionOn = body.dataset.motion !== "off";
   body.dataset.motion = motionOn ? "off" : "on";
-  document.querySelector('[data-action="motion"]').textContent = motionOn ? "开启动效" : "关闭动效";
+
+  if (motionButton) {
+    motionButton.textContent = motionOn ? "开启动效" : "关闭动效";
+  }
 }
 
 function toggleFullscreen() {
