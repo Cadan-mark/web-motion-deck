@@ -30,7 +30,7 @@ function toggleTheme() {
   body.dataset.theme = isDark ? "light" : "dark";
 
   if (themeButton) {
-    themeButton.setAttribute("aria-pressed", String(isDark));
+    themeButton.setAttribute("aria-pressed", String(body.dataset.theme === "light"));
   }
 }
 
@@ -40,7 +40,7 @@ function toggleMotion() {
 
   if (motionButton) {
     motionButton.textContent = motionOn ? "开启动效" : "关闭动效";
-    motionButton.setAttribute("aria-pressed", String(motionOn));
+    motionButton.setAttribute("aria-pressed", String(body.dataset.motion === "off"));
   }
 }
 
