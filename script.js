@@ -57,13 +57,13 @@ function toggleFullscreen() {
     return;
   }
 
-  const fullscreenRequest = document.documentElement.requestFullscreen?.();
-
-  if (!fullscreenRequest) {
+  if (typeof document.documentElement.requestFullscreen !== "function") {
     updateStatusLabel("全屏不可用");
     window.setTimeout(() => updateStatusLabel(`${currentIndex + 1} / ${slides.length}`), 1600);
     return;
   }
+
+  const fullscreenRequest = document.documentElement.requestFullscreen();
 
   fullscreenRequest.catch(() => {
     updateStatusLabel("全屏不可用");
@@ -90,7 +90,11 @@ document.addEventListener("click", (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
-  if (event.target.closest("button, a, input, select, textarea")) {
+  if (
+    event.target.closest("button, a, input, select, textarea") ||
+    event.target.isContentEditable ||
+    event.target.closest('[contenteditable="true"]')
+  ) {
     return;
   }
 
