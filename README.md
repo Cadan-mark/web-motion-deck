@@ -79,7 +79,7 @@ Web Motion Deck —— 基于原生 HTML / CSS / JavaScript 的 Web 视觉交互
 
 ## 十、运行说明
 
-本项目为静态网页项目，推荐包含以下文件：
+本项目为静态网页项目；当你补齐并发布完整展示作品时，项目根目录建议包含以下文件：
 
 - `index.html`
 - `style.css`
@@ -113,7 +113,3 @@ Web Motion Deck 以原生 Web 技术为基础，突出视觉表达、交互体�
 详细部署步骤请查看：
 
 - [DEPLOYMENT.md](DEPLOYMENT.md)
-
-```text
-DEPLOYMENT.md
-```
