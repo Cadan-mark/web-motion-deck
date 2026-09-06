@@ -6,6 +6,12 @@ const motionButton = document.querySelector('[data-action="motion"]');
 let currentIndex = 0;
 let touchStartX = 0;
 
+function updateStatusLabel(text) {
+  if (statusText) {
+    statusText.textContent = text;
+  }
+}
+
 function renderSlide(index) {
   if (slides.length === 0) {
     return;
@@ -20,9 +26,7 @@ function renderSlide(index) {
     slide.setAttribute("aria-hidden", String(!isActive));
   });
 
-  if (statusText) {
-    statusText.textContent = `${currentIndex + 1} / ${slides.length}`;
-  }
+  updateStatusLabel(`${currentIndex + 1} / ${slides.length}`);
 }
 
 function toggleTheme() {
@@ -46,11 +50,25 @@ function toggleMotion() {
 
 function toggleFullscreen() {
   if (document.fullscreenElement) {
-    document.exitFullscreen();
+    document.exitFullscreen().catch(() => {
+      updateStatusLabel("退出全屏失败");
+      window.setTimeout(() => updateStatusLabel(`${currentIndex + 1} / ${slides.length}`), 1600);
+    });
     return;
   }
 
-  document.documentElement.requestFullscreen?.();
+  const fullscreenRequest = document.documentElement.requestFullscreen?.();
+
+  if (!fullscreenRequest) {
+    updateStatusLabel("全屏不可用");
+    window.setTimeout(() => updateStatusLabel(`${currentIndex + 1} / ${slides.length}`), 1600);
+    return;
+  }
+
+  fullscreenRequest.catch(() => {
+    updateStatusLabel("全屏不可用");
+    window.setTimeout(() => updateStatusLabel(`${currentIndex + 1} / ${slides.length}`), 1600);
+  });
 }
 
 const actionHandlers = {
@@ -72,6 +90,10 @@ document.addEventListener("click", (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
+  if (event.target.closest("button, a, input, select, textarea")) {
+    return;
+  }
+
   if (event.key === "ArrowLeft") {
     renderSlide(currentIndex - 1);
   } else if (event.key === "ArrowRight") {
