@@ -96,7 +96,7 @@ git push
 3. 在 **Build and deployment** 中选择：
    - **Source**：`Deploy from a branch`
    - **Branch**：`main`
-   - **Folder**：`/root`
+   - **Folder**：`/ (root)`（即仓库根目录）
 4. 点击 **Save**
 
 保存后，GitHub 会开始部署静态页面。
@@ -171,7 +171,7 @@ https://Cadan-mark.github.io/web-motion-deck/
 
 - `Settings → Pages` 是否已保存成功
 - 分支是否为 `main`
-- 文件夹是否选择 `/root`
+- 文件夹是否选择 `/ (root)`
 - 仓库根目录是否存在 `index.html`
 
 ### 4. 页面更新后没有立即生效
