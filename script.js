@@ -1,6 +1,7 @@
 const slides = Array.from(document.querySelectorAll("[data-slide]"));
 const statusText = document.getElementById("statusText");
 const body = document.body;
+const themeButton = document.querySelector('[data-action="theme"]');
 const motionButton = document.querySelector('[data-action="motion"]');
 let currentIndex = 0;
 let touchStartX = 0;
@@ -25,7 +26,12 @@ function renderSlide(index) {
 }
 
 function toggleTheme() {
-  body.dataset.theme = body.dataset.theme === "dark" ? "light" : "dark";
+  const isDark = body.dataset.theme === "dark";
+  body.dataset.theme = isDark ? "light" : "dark";
+
+  if (themeButton) {
+    themeButton.setAttribute("aria-pressed", String(isDark));
+  }
 }
 
 function toggleMotion() {
@@ -34,6 +40,7 @@ function toggleMotion() {
 
   if (motionButton) {
     motionButton.textContent = motionOn ? "开启动效" : "关闭动效";
+    motionButton.setAttribute("aria-pressed", String(motionOn));
   }
 }
 
@@ -46,6 +53,14 @@ function toggleFullscreen() {
   document.documentElement.requestFullscreen?.();
 }
 
+const actionHandlers = {
+  prev: () => renderSlide(currentIndex - 1),
+  next: () => renderSlide(currentIndex + 1),
+  theme: toggleTheme,
+  motion: toggleMotion,
+  fullscreen: toggleFullscreen
+};
+
 document.addEventListener("click", (event) => {
   const action = event.target.closest("[data-action]")?.dataset.action;
 
@@ -53,17 +68,7 @@ document.addEventListener("click", (event) => {
     return;
   }
 
-  if (action === "prev") {
-    renderSlide(currentIndex - 1);
-  } else if (action === "next") {
-    renderSlide(currentIndex + 1);
-  } else if (action === "theme") {
-    toggleTheme();
-  } else if (action === "motion") {
-    toggleMotion();
-  } else if (action === "fullscreen") {
-    toggleFullscreen();
-  }
+  actionHandlers[action]?.();
 });
 
 document.addEventListener("keydown", (event) => {
